@@ -54,14 +54,14 @@ def calculate_specular(light, sreflect, view, normal):
     L = light[0]
     normalize(normal)
     normalize(L)
+    normalize(view)
     
     R = [0,0,0]
     R[0] = (2 * normal[0] * dot_product(normal, L) - L[0])
     R[1] = (2 * normal[1] * dot_product(normal, L) - L[1])
-    R[1] = (2 * normal[2] * dot_product(normal, L) - L[2])
+    R[2] = (2 * normal[2] * dot_product(normal, L) - L[2])
     
     normalize(R)
-    normalize(view)
     
     prod = math.pow(dot_product(R, view), SPECULAR_EXP)
     
