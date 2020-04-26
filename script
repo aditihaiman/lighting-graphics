@@ -16,7 +16,7 @@ push
 move
 250 250 0
 sphere
-0 0 0 200
+0 0 0 200 200 200
 display
 #clear everything, test sphere again
 clear
@@ -25,7 +25,7 @@ z 60
 rotate
 y 30
 sphere
-0 0 0 200
+0 0 0 200 200 200
 display
 #clear everything, test torus
 clear
@@ -64,7 +64,7 @@ move
 rotate
 y 90
 sphere
-0 0 0 50
+0 0 0 50 50 50
 pop
 #LEFT ARM
 push

@@ -80,9 +80,7 @@ def parse_file( fname, edges, polygons, csystems, screen, zbuffer, color,view, a
 
         elif line == 'sphere':
             #print 'SPHERE\t' + str(args)
-            add_sphere(polygons,
-                       float(args[0]), float(args[1]), float(args[2]),
-                       float(args[3]), step_3d)
+            add_sphere(polygons, float(args[0]), float(args[1]), float(args[2]), float(args[3]), float(args[4]), float(args[4]), step_3d)
             matrix_mult(csystems[-1], polygons)
             draw_polygons(polygons, screen, zbuffer, view, ambient, light, areflect, dreflect, sreflect)
             polygons = []
