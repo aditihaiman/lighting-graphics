@@ -34,35 +34,37 @@ def get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect ):
     return lighting
 
 def calculate_ambient(alight, areflect):
-    alight[0] = alight[0] * areflect[0]
-    alight[1] = alight[1] * areflect[1]
-    alight[2] = alight[2] * areflect[2]
-    return alight
+    A = [0,0,0]
+    A[0] = alight[0] * areflect[0]
+    A[1] = alight[1] * areflect[1]
+    A[2] = alight[2] * areflect[2]
+    return A
 
 def calculate_diffuse(light, dreflect, normal):
     L = light[0]
     normalize(normal)
     normalize(L)
     diffuse = [0, 0, 0]
-    diffuse[0] = light[1][0] * dreflect[0] * dot_product(normal, L, True)
-    diffuse[1] = light[1][1] * dreflect[1] * dot_product(normal, L, True)
-    diffuse[2] = light[1][2] * dreflect[2] * dot_product(normal, L, True)
+    diffuse[0] = light[1][0] * dreflect[0] * dot_product(normal, L)
+    diffuse[1] = light[1][1] * dreflect[1] * dot_product(normal, L)
+    diffuse[2] = light[1][2] * dreflect[2] * dot_product(normal, L)
     return diffuse
 
 def calculate_specular(light, sreflect, view, normal):
     L = light[0]
     normalize(normal)
     normalize(L)
-    normalize(view)
     
     R = [0,0,0]
-    R[0] = (2 * normal[0] * dot_product(normal, L, True) - L[0])
-    R[1] = (2 * normal[1] * dot_product(normal, L, True) - L[1])
-    R[1] = (2 * normal[2] * dot_product(normal, L, True) - L[2])
+    R[0] = (2 * normal[0] * dot_product(normal, L) - L[0])
+    R[1] = (2 * normal[1] * dot_product(normal, L) - L[1])
+    R[1] = (2 * normal[2] * dot_product(normal, L) - L[2])
     
+    normalize(R)
+    normalize(view)
     
-    prod = math.pow(dot_product(R, view, True), 3)
-
+    prod = math.pow(dot_product(R, view), SPECULAR_EXP)
+    
     specular = [0, 0, 0]
     specular[0] = light[1][0] * sreflect[0] * prod
     specular[1] = light[1][1] * sreflect[1] * prod
@@ -84,7 +86,7 @@ def normalize(vector):
         vector[i] = vector[i] / magnitude
 
 #Return the dot porduct of a . b
-def dot_product(a, b, check):
+def dot_product(a, b, check=False):
     temp = a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
     #if(check and temp < 0): temp = 0
     return temp

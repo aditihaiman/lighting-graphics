@@ -17,12 +17,12 @@ light = [[0.5, 0.75, 1], #light vector
 areflect = [0.1, #Ka
             0.1,
             0.1]
-dreflect = [0.7, #Kd
-            0.7,
-            0.7]
-sreflect = [0.9, #Ks
-            0.9,
-            0.9]
+dreflect = [0.5, #Kd
+            0.5,
+            0.5]
+sreflect = [0.5, #Ks
+            0.5,
+            0.5]
 
 
 
@@ -36,4 +36,4 @@ ident(t)
 csystems = [ t ]
 
 
-parse_file( 'script2', edges, polygons, csystems, screen, zbuffer, color, view, ambient, light, areflect, dreflect, sreflect)
+parse_file( 'script', edges, polygons, csystems, screen, zbuffer, color, view, ambient, light, areflect, dreflect, sreflect)
