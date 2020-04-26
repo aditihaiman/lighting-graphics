@@ -55,13 +55,14 @@ def calculate_specular(light, sreflect, view, normal):
     normalize(L)
     normalize(view)
     
-    x = [0,0,0]
-    x[0] = (2 * normal[0] * dot_product(normal, L, True) - L[0])
-    x[1] = (2 * normal[1] * dot_product(normal, L, True) - L[1])
-    x[1] = (2 * normal[2] * dot_product(normal, L, True) - L[2])
+    R = [0,0,0]
+    R[0] = (2 * normal[0] * dot_product(normal, L, True) - L[0])
+    R[1] = (2 * normal[1] * dot_product(normal, L, True) - L[1])
+    R[1] = (2 * normal[2] * dot_product(normal, L, True) - L[2])
     
-    prod = math.pow(dot_product(x, view, True), 2)
     
+    prod = math.pow(dot_product(R, view, True), 3)
+
     specular = [0, 0, 0]
     specular[0] = light[1][0] * sreflect[0] * prod
     specular[1] = light[1][1] * sreflect[1] * prod
@@ -85,7 +86,7 @@ def normalize(vector):
 #Return the dot porduct of a . b
 def dot_product(a, b, check):
     temp = a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
-    if(check and temp < 0): temp = 0
+    #if(check and temp < 0): temp = 0
     return temp
 
 #Calculate the surface normal for the triangle whose first
