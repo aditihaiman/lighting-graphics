@@ -27,10 +27,10 @@ def get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect ):
     diffuse = calculate_diffuse(light, dreflect, normal)
     specular = calculate_specular(light, sreflect, view, normal)
     
-    lighting[0] = alight[0] + diffuse[0] + specular[0]
-    lighting[1] = alight[1] + diffuse[1] + specular[1]
-    lighting[2] = alight[2] + diffuse[2] + specular[2]
-    
+    lighting[0] = int(alight[0] + diffuse[0] + specular[0])
+    lighting[1] = int(alight[1] + diffuse[1] + specular[1])
+    lighting[2] = int(alight[2] + diffuse[2] + specular[2])
+    limit_color(lighting)
     return lighting
 
 def calculate_ambient(alight, areflect):
@@ -40,21 +40,38 @@ def calculate_ambient(alight, areflect):
     return alight
 
 def calculate_diffuse(light, dreflect, normal):
+    L = light[0]
+    normalize(normal)
+    normalize(L)
     diffuse = [0, 0, 0]
-    diffuse[0] = light[1][0] * dreflect[0] * dot_product(normalize(normal), normalize(light[0]))
-    diffuse[1] = light[1][1] * dreflect[1] * dot_product(normalize(normal), normalize(light[0]))
-    diffuse[2] = light[1][2] * dreflect[2] * dot_product(normalize(normal), normalize(light[0]))
+    diffuse[0] = light[1][0] * dreflect[0] * dot_product(normal, L, True)
+    diffuse[1] = light[1][1] * dreflect[1] * dot_product(normal, L, True)
+    diffuse[2] = light[1][2] * dreflect[2] * dot_product(normal, L, True)
     return diffuse
 
 def calculate_specular(light, sreflect, view, normal):
+    L = light[0]
+    normalize(normal)
+    normalize(L)
+    normalize(view)
+    
+    x = [0,0,0]
+    x[0] = (2 * normal[0] * dot_product(normal, L, True) - L[0])
+    x[1] = (2 * normal[1] * dot_product(normal, L, True) - L[1])
+    x[1] = (2 * normal[2] * dot_product(normal, L, True) - L[2])
+    
+    prod = math.pow(dot_product(x, view, True), 2)
+    
     specular = [0, 0, 0]
-    specular[0] = light[1][0] * sreflect[0] * (dot_product(((2*normalize(normal))*(dot_product(normalize(normal), normalize(light[1]))-normalize(light[1]))), normalize(view)))
-    specular[1] = light[1][1] * sreflect[1] * (dot_product(((2*normalize(normal))*(dot_product(normalize(normal), normalize(light[1]))-normalize(light[1]))), normalize(view)))
-    specular[2] = light[1][2] * sreflect[2] * (dot_product(((2*normalize(normal))*(dot_product(normalize(normal), normalize(light[1]))-normalize(light[1]))), normalize(view)))
+    specular[0] = light[1][0] * sreflect[0] * prod
+    specular[1] = light[1][1] * sreflect[1] * prod
+    specular[2] = light[1][2] * sreflect[2] * prod
     return specular
 
 def limit_color(color):
-    pass
+    for x in range(3):
+        if(color[x] < 0): color[x] = 0
+        if(color[x] > 255): color[x] = 255
 
 #vector functions
 #normalize vetor, should modify the parameter
@@ -66,8 +83,10 @@ def normalize(vector):
         vector[i] = vector[i] / magnitude
 
 #Return the dot porduct of a . b
-def dot_product(a, b):
-    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
+def dot_product(a, b, check):
+    temp = a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
+    if(check and temp < 0): temp = 0
+    return temp
 
 #Calculate the surface normal for the triangle whose first
 #point is located at index i in polygons
